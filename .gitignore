@@ -9,8 +9,7 @@ bin/
 obj/   
 #数据库文件不提交
 *.db
-# Nuget packages directory  
-packages/  
+
 # ide
 .idea/
 .vs/

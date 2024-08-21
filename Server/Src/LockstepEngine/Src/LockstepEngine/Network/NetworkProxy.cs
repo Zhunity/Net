@@ -1,3 +1,4 @@
+using Lockstep.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -107,12 +108,15 @@ namespace Lockstep.Network {
             }
         }
 
-        private async void StartAccept(){
+		/// <summary>
+		/// 在未dispose之前，一直await等待客户端连接
+		/// </summary>
+		private async void StartAccept(){
             while (true) {
-                if (this.IsDisposed) {
+				Debug.Log("StartAccept  " + this.IsDisposed + "  " + this.Id);
+				if (this.IsDisposed) {
                     return;
                 }
-
                 await this.Accept();
             }
         }

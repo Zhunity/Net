@@ -6,8 +6,7 @@ BombMan/
 # Build and Object Folders  
 bin/  
 obj/  
-# Nuget packages directory  
-packages/  
+
 # ide
 .idea/
 .vs/
