@@ -76,8 +76,15 @@ namespace Lockstep.Network {
 
         private readonly Dictionary<long, Session> sessions = new Dictionary<long, Session>();
 
+        /// <summary>
+        /// 解析具体是哪条协议的
+        /// </summary>
         public IMessagePacker MessagePacker { get; set; }
 
+        /// <summary>
+        /// 在客户端是Client，在服务器是Server
+        /// TODO 感觉这么传给NetProxy真的好吗？
+        /// </summary>
         public IMessageDispatcher MessageDispatcher { get; set; }
 
         public void Awake(NetworkProtocol protocol){
