@@ -1,0 +1,6 @@
+[submodule "Server/Src/LockstepEngine/Src/HvakNetFramework"]
+	path = Server/Src/LockstepEngine/Src/HvakNetFramework
+	url = https://github.com/Zhunity/HvakNetFramework.git
+[submodule "Unity/Assets/HvakNetFramework"]
+	path = Unity/Assets/HvakNetFramework
+	url = https://github.com/Zhunity/HvakNetFramework.git
