@@ -8,7 +8,7 @@ using NetMsg.Common;
 namespace Lockstep.Game{
     public class NetClient : IMessageDispatcher {
         public static IPEndPoint serverIpPoint = NetworkUtil.ToIPEndPoint("127.0.0.1", 10083);
-        private NetOuterProxy net = new NetOuterProxy();
+        private NetOuterProxy _netProxy = new NetOuterProxy();
         public Session Session;
         public Action<ushort, object> NetMsgHandler;
 
@@ -16,16 +16,16 @@ namespace Lockstep.Game{
         public int id;
 
         public void DoStart(){
-            net.Awake(NetworkProtocol.TCP);
-            net.MessageDispatcher = this;
-            net.MessagePacker = MessagePacker.Instance;
-            Session = net.Create(serverIpPoint);
+            _netProxy.Awake(NetworkProtocol.TCP);
+            _netProxy.MessageDispatcher = this;
+            _netProxy.MessagePacker = MessagePacker.Instance;
+            Session = _netProxy.Create(serverIpPoint);
             Session.Start();
         }
 
         public void DoDestroy(){
             if (Session != null) {
-                net.Dispose();
+                _netProxy.Dispose();
                 Session = null;
             }
         }
