@@ -16,7 +16,7 @@ namespace Lockstep.Game{
         public int id;
 
         public void DoStart(){
-            _netProxy.Awake(NetworkProtocol.TCP);
+            _netProxy.StartAsClient(NetworkProtocol.TCP);
             _netProxy.MessageDispatcher = this;
             _netProxy.MessagePacker = MessagePacker.Instance;
             Session = _netProxy.Create(serverIpPoint);

@@ -33,7 +33,7 @@ namespace Lockstep.FakeServer {
         public void Start(){
             _netProxy.MessageDispatcher = this;
             _netProxy.MessagePacker = MessagePacker.Instance;
-            _netProxy.Awake(NetworkProtocol.TCP, serverIpPoint);
+            _netProxy.StartAsServer(NetworkProtocol.TCP, serverIpPoint);
             _startUpTimeStamp = _lastUpdateTimeStamp = DateTime.Now;
         }
 
