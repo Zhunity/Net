@@ -37,33 +37,24 @@ namespace Lockstep.FakeServer {
             _startUpTimeStamp = _lastUpdateTimeStamp = DateTime.Now;
         }
 
-        public void Dispatch(Session session, Packet packet){
-            ushort opcode = packet.Opcode();
-            if (opcode == 39) { 
-                int i = 0;
-            }
-
-            var message = session.Network.MessagePacker.DeserializeFrom(opcode, packet.Bytes, Packet.Index,
-                packet.Length - Packet.Index);
-            OnNetMsg(session, opcode, message as BaseMsg);
-        }
-
-        void OnNetMsg(Session session, ushort opcode, BaseMsg msg){
-            var type = (EMsgSC) opcode;
-            switch (type) {
-                //login
-                // case EMsgSC.L2C_JoinRoomResult: 
-                case EMsgSC.C2L_JoinRoom:
-                    OnPlayerConnect(session, msg);
-                    return;
-                case EMsgSC.C2L_LeaveRoom:
-                    OnPlayerQuit(session, msg);
-                    return;
-                //room
-            }
-            var player = session.GetBindInfo<Player>();
-            _game?.OnNetMsg(player, opcode, msg);
-        }
+        public void Dispatch(Session session, ushort opcode, BaseMsg msg)
+		{
+			var type = (EMsgSC)opcode;
+			switch (type)
+			{
+				//login
+				// case EMsgSC.L2C_JoinRoomResult: 
+				case EMsgSC.C2L_JoinRoom:
+					OnPlayerConnect(session, msg);
+					return;
+				case EMsgSC.C2L_LeaveRoom:
+					OnPlayerQuit(session, msg);
+					return;
+					//room
+			}
+			var player = session.GetBindInfo<Player>();
+			_game?.OnNetMsg(player, opcode, msg);
+		}
 
         public void Update(){
             var now = DateTime.Now;
@@ -85,29 +76,35 @@ namespace Lockstep.FakeServer {
 
         void OnPlayerConnect(Session session, BaseMsg message){
             //TODO load from db
-            var info = new Player();
-            info.UserId = _idCounter++;
-            info.PeerTcp = session;
-            info.PeerUdp = session;
-            _id2Player[info.UserId] = info;
-            session.BindInfo = info;
+            var player = new Player();
+            player.UserId = _idCounter++;
+            player.PeerTcp = session;
+            player.PeerUdp = session;
+            _id2Player[player.UserId] = player;
+            session.BindInfo = player;
             _curCount++;
-            if (_curCount >= Game.MaxPlayerCount) {
-                //TODO temp code
-                _game = new Game();
-                var players = new Player[_curCount];
-                int i = 0;
-                foreach (var player in _id2Player.Values) {
-                    player.LocalId = (byte) i;
-                    player.Game = _game;
-                    players[i] = player;
-                    i++;
-                }
-                _game.DoStart(0, 0, 0, players, "123");
-            }
-
-            Debug.Log("OnPlayerConnect count:" + _curCount + " ");
+            NewGame();
+			Debug.Log("OnPlayerConnect count:" + _curCount + " ");
         }
+
+        void NewGame()
+        {
+			if (_curCount >= Game.MaxPlayerCount)
+			{
+				//TODO temp code
+				_game = new Game();
+				var players = new Player[_curCount];
+				int i = 0;
+				foreach (var player in _id2Player.Values)
+				{
+					player.LocalId = (byte)i;
+					player.Game = _game;
+					players[i] = player;
+					i++;
+				}
+				_game.DoStart(0, 0, 0, players, "123");
+			}
+		}
 
         void OnPlayerQuit(Session session, BaseMsg message){
             var player = session.GetBindInfo<Player>();
