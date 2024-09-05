@@ -12,7 +12,7 @@ namespace Lockstep.FakeServer {
     public class Server : IMessageDispatcher {
         //network
         public static IPEndPoint serverIpPoint = NetworkUtil.ToIPEndPoint("127.0.0.1", 10083);
-        private NetOuterProxy _netProxy = new NetOuterProxy();
+        private NetInnerProxy _netProxy = new NetInnerProxy();
 
         //update
         private const double UpdateInterval = NetworkDefine.UPDATE_DELTATIME /1000.0f; //frame rate = 30

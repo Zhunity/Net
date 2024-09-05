@@ -38,6 +38,9 @@ namespace Lockstep.Game {
 
         public EGameState CurGameState = EGameState.Idle;
 
+        /// <summary>
+        /// 名字诈骗，现在其实还是Tcp
+        /// </summary>
         private NetClient _netUdp;
         private NetClient _netTcp;
 
@@ -50,7 +53,7 @@ namespace Lockstep.Game {
         }
 
         private float _nextSendLoadProgressTimer;
-        private IRoomMsgHandler _handler;
+        private IRoomMsgHandler _handler;   // TODO 这个handler有必要吗？
 
 
         protected string _gameHash;
@@ -73,10 +76,11 @@ namespace Lockstep.Game {
             _allMsgParsers = new ParseNetMsg[_maxMsgId];
             RegisterMsgHandlers();
             _handler = msgHandler;
-            _netUdp = _netTcp = new NetClient();//TODO Login
+            _netUdp = _netTcp = new NetClient();//TODO Login FUCK 这里两个是同个东西
             _netTcp.DoStart();
             _netTcp.NetMsgHandler = OnNetMsg;
-        }
+			Debug.LogFormat("_netUdp {0} {1} _netTcp : {2} {3}", _netUdp.id, _netUdp.Session?.Id, _netTcp.id, _netTcp.Session.Id);
+		}
 
         void OnNetMsg(ushort opcode, object msg){
             var type = (EMsgSC) opcode;
@@ -166,6 +170,9 @@ namespace Lockstep.Game {
             });
         }
 
+        /// <summary>
+        /// TODO 卵用没有?
+        /// </summary>
         void ConnectUdp(){
             _handler.OnUdpHello(_curMapId, _localId);
         }
@@ -278,6 +285,7 @@ namespace Lockstep.Game {
 
 
         public void SendUdp(EMsgSC msgId, ISerializable body){
+            //Debug.Log("SendUdp : " + msgId);
             var writer = new Serializer();
             body.Serialize(writer);
             _netUdp?.SendMessage(msgId, writer.CopyData());

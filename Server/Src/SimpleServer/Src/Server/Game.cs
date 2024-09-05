@@ -547,6 +547,7 @@ namespace Lockstep.FakeServer {
         #region Net msg handler
 
         public void OnNetMsg(Player player, ushort opcode, BaseMsg msg){
+            Debug.Log("OnNetMsg {0} {1}", player.UserId, ((EMsgSC)opcode).ToString());
             var type = (EMsgSC) opcode;
             switch (type) {
                 //ping 

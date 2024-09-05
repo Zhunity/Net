@@ -4,6 +4,9 @@ using NetMsg.Common;
 using Debug = UnityEngine.Debug;
 
 namespace Lockstep.Game {
+    /// <summary>
+    /// TODO 看起来没什么乱用
+    /// </summary>
     public class NetworkMsgHandler : IRoomMsgHandler, ILoginHandler {
         void Log(string msg){
             Debug.Log(msg);
